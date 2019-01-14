@@ -8,6 +8,8 @@
 // Commands entered in the serial monitor are relayed to the ESP8266
 
 #include <SoftwareSerial.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
 SoftwareSerial ESPserial (2,3); //RX|TX
 
 
