@@ -1,0 +1,8 @@
+21:04:59.466 -> Connecting to Dicosta
+......
+21:05:02.457 -> WiFi connected
+21:05:02.491 -> Server started
+21:05:02.491 -> 192.168.0.104
+
+http://192.168.0.104/gpio1/0
+http://192.168.0.104/gpio2/0
