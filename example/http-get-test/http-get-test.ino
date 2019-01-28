@@ -1,71 +1,63 @@
-/*
- * Interfacing:
- * https://www.youtube.com/watch?v=BXbDAyR5cIU
- * https://medium.com/@cgrant/using-the-esp8266-wifi-module-with-arduino-uno-publishing-to-thingspeak-99fc77122e82
- *      
- *    PINOUT: 
- *        _______________________________
- *       |  ARDUINO UNO   >>>   ESP8266  |
- *        -------------------------------
- *        GND      >>>   GND
- *        3.3v     >>>   VCC
- *        3.3v     >>>   CH_PD
- *        RX(<-2)  >>>   TX
- *        TX(<-3)  >>>   RX
- *
- *    NOTE: ESP8266 runs with 3.3v
- *
- *        Created on: Jan 10, 2019
- *        Author: Md. Rashadul Alam
- *        Email: rashed.droid@gmail.com
- */
-
 #include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
-#include <ArduinoJson.h>
 
-const char* ssid = "Dicosta";
+const char* ssid     = "Dicosta";
 const char* password = "ramo011911";
+const char* host = "iot-cuddle.000webhostapp.com";
+float h = 35.00;
+float t = 25.00;
 
-void setup() 
-{
+void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) 
-  {
-    delay(1000);
-    Serial.println("Connecting...");
+  delay(100);
+  Serial.println();
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+  
+  WiFi.begin(ssid, password); 
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
+ 
+  Serial.println("");
+  Serial.println("WiFi connected");  
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("Netmask: ");
+  Serial.println(WiFi.subnetMask());
+  Serial.print("Gateway: ");
+  Serial.println(WiFi.gatewayIP());
+  Serial.print("MAC: ");
+  Serial.println(WiFi.macAddress());
 }
 
-void loop() 
-{
-  if (WiFi.status() == WL_CONNECTED) 
-  {
-    HTTPClient http; //Object of class HTTPClient
-    http.begin("http://jsonplaceholder.typicode.com/users/1");
-    int httpCode = http.GET();
+void loop() {
+  Serial.print("connecting to ");
+  Serial.println(host);
 
-    if (httpCode > 0) 
-    {
-      const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(5) + JSON_OBJECT_SIZE(8) + 370;
-      DynamicJsonBuffer jsonBuffer(bufferSize);
-      JsonObject& root = jsonBuffer.parseObject(http.getString());
- 
-      int id = root["id"]; 
-      const char* name = root["name"]; 
-      const char* username = root["username"]; 
-      const char* email = root["email"]; 
-
-      Serial.print("Name:");
-      Serial.println(name);
-      Serial.print("Username:");
-      Serial.println(username);
-      Serial.print("Email:");
-      Serial.println(email);
-    }
-    http.end(); //Close connection
+  WiFiClient client;
+  const int httpPort = 80;
+  if (!client.connect(host, httpPort)) {
+    Serial.println("connection failed");
+    return;
   }
-  delay(60000);
+
+  String url = "/iot/api/weather/insert.php?temp=" + String(t++) + "&hum="+ String(h++);
+  Serial.print("Requesting URL: ");
+  Serial.println(url);
+  
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" + 
+               "Connection: close\r\n\r\n");
+  delay(500);
+  
+  while(client.available()){
+    String line = client.readStringUntil('\r');
+    Serial.print(line);
+  }
+  
+  Serial.println();
+  Serial.println("closing connection");
+  delay(3000);
 }
