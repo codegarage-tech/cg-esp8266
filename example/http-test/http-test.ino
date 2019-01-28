@@ -1,18 +1,14 @@
 #include <ESP8266WiFi.h>
-#include "DHT.h"
 
-#define DHTPIN D1
-#define DHTTYPE DHT11 
- 
 const char* ssid     = "Dicosta";
 const char* password = "ramo011911";
-const char* host = "https://iot-cuddle.000webhostapp.com";
-DHT dht(DHTPIN, DHTTYPE);
+const char* host = "iot-cuddle.000webhostapp.com";
+float h = 35.00;
+float t = 25.00;
 
 void setup() {
   Serial.begin(115200);
   delay(100);
-  dht.begin();
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -32,17 +28,11 @@ void setup() {
   Serial.println(WiFi.subnetMask());
   Serial.print("Gateway: ");
   Serial.println(WiFi.gatewayIP());
+  Serial.print("MAC: ");
+  Serial.println(WiFi.macAddress());
 }
 
 void loop() {
-  float h = dht.readHumidity();
-  // Read temperature as Celsius (the default)
-  float t = dht.readTemperature();
-  if (isnan(h) || isnan(t)) {
-    Serial.println("Failed to read from DHT sensor!");
-    return;
-  }
-
   Serial.print("connecting to ");
   Serial.println(host);
 
@@ -52,8 +42,8 @@ void loop() {
     Serial.println("connection failed");
     return;
   }
-  
-  String url = "/iot/api/weather/insert.php?temp=" + String(t) + "&hum="+ String(h);
+
+  String url = "/iot/api/weather/insert.php?temp=" + String(t++) + "&hum="+ String(h++);
   Serial.print("Requesting URL: ");
   Serial.println(url);
   
@@ -71,5 +61,3 @@ void loop() {
   Serial.println("closing connection");
   delay(3000);
 }
-
-

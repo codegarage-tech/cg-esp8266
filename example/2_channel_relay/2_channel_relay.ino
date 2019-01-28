@@ -31,18 +31,20 @@ void setup()
 
 void loop() 
 { 
-  WiFiClient client = server.available();       // Check if a client has connected
-  if (!client) 
-  {
-    return;                                     // Wait until the client sends some data
+  WiFiClient client = server.available();
+  if (!client) {                              //Check if a client has connected
+    return;                                   //Wait until the client sends some data
+  } else {
+    Serial.println("new client is found");
   }
-  Serial.println("new client");
+
   while(!client.available())
   {
     delay(1);
   }
+  Serial.println("Reading client data");
   String req = client.readStringUntil('\r');   // Read the first line of the request
-  Serial.println(req);
+  Serial.println("Client req: " + req);
   client.flush();
   int val1;
   int val2;
@@ -63,7 +65,7 @@ void loop()
   digitalWrite(2, val1);               // Set GPIO 2 according to the request
   digitalWrite(0, val2);               // Set GPIO 0 according to the request
   client.flush();
-  
+
   String s = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE HTML>\r\n<html>";        // Prepare the response
   s += "<body><h1>ESP8266 Smallest Home Automation</h1>\r\nGPIO1 is now ";
   s += (val1)?"high":"low";

@@ -6,3 +6,7 @@
 
 http://192.168.0.104/gpio1/0
 http://192.168.0.104/gpio2/0
+
+220v+ > bulb+
+220v- > relay com
+relay NO> bulb-
