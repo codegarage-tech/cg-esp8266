@@ -11,12 +11,12 @@ int count = 0;
 void setup() {
   Serial.begin(115200);
   delay(100);
-  pinMode(D1, OUTPUT);
-  pinMode(D2, OUTPUT);
-  pinMode(D3, OUTPUT);
-  digitalWrite(D1, 0);
-  digitalWrite(D2, 0);
-  digitalWrite(D3, 0);
+  pinMode(0, OUTPUT);
+  pinMode(2, OUTPUT);
+//  pinMode(D3, OUTPUT);
+  digitalWrite(0, LOW);
+  digitalWrite(2, LOW);
+//  digitalWrite(D3, LOW);
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -38,9 +38,9 @@ void setup() {
   Serial.println(WiFi.gatewayIP());
   Serial.print("MAC: ");
   Serial.println(WiFi.macAddress());
-  digitalWrite(D1, 1);
+  digitalWrite(0, HIGH);
   delay(500);
-  digitalWrite(D1, 0);
+  digitalWrite(0, LOW);
   delay(500);
 }
 
@@ -64,11 +64,12 @@ void loop() {
     url = "/iot/api/led/specific.php?id=2";
     count = count + 1;
     Serial.println("Here2");
-  } else if(count == 2){
-    url = "/iot/api/led/specific.php?id=3";
-    count = count + 1;
-    Serial.println("Here3");
   }
+//  else if(count == 2){
+//    url = "/iot/api/led/specific.php?id=3";
+//    count = count + 1;
+//    Serial.println("Here3");
+//  }
   Serial.print("Requesting URL: ");
   Serial.println(url);
   
@@ -104,34 +105,35 @@ void loop() {
 
       if(count == 1){
         if(led == "on"){
-          digitalWrite(D1, 1);
+          digitalWrite(0, HIGH);
           delay(100);
-          Serial.println("D1 is On..!");
+          Serial.println("GPIO0 is On..!");
         } else if(led == "off"){
-          digitalWrite(D1, 0);
+          digitalWrite(0, LOW);
           delay(100);
-          Serial.println("D1 is Off..!");
+          Serial.println("GPIO0 is Off..!");
         }
       } else if(count == 2){
         if(led == "on"){
-          digitalWrite(D2, 1);
-          Serial.println("D2 is On..!");
+          digitalWrite(2, HIGH);
+          Serial.println("GPIO2 is On..!");
         } else if(led == "off"){
-          digitalWrite(D2, 0);
-          Serial.println("D2 is Off..!");
+          digitalWrite(2, LOW);
+          Serial.println("GPIO2 is Off..!");
         }
-      } else if(count == 3){
-        if(led == "on"){
-          digitalWrite(D3, 1);
-          Serial.println("D3 is On..!");
-        } else if(led == "off"){
-          digitalWrite(D3, 0);
-          Serial.println("D3 is Off..!");
-        }
-        count = 0;
       }
+//      else if(count == 3){
+//        if(led == "on"){
+//          digitalWrite(D3, HIGH);
+//          Serial.println("D3 is On..!");
+//        } else if(led == "off"){
+//          digitalWrite(D3, LOW);
+//          Serial.println("D3 is Off..!");
+//        }
+//        count = 0;
+//      }
 
-      if (count == 3){
+      if (count == 2){
           count = 0;
       }
     }
