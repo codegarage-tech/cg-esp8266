@@ -42,8 +42,8 @@ void setup() {
   delay(1000);
   pinMode(0, OUTPUT);
   pinMode(2, OUTPUT);
-  digitalWrite(0, LOW);
-  digitalWrite(2, LOW);
+  digitalWrite(0, HIGH);
+  digitalWrite(2, HIGH);
   Serial.println();
 
   connectToWifi();
@@ -101,21 +101,21 @@ void loop() {
           //do further task
           if (gpioId == "1") {
             if (gpioStatus == "on") {
-              digitalWrite(0, HIGH);
+              digitalWrite(0, LOW);
               delay(100);
               Serial.println("GPIO 0 is On..!");
             } else if (gpioStatus == "off") {
-              digitalWrite(0, LOW);
+              digitalWrite(0, HIGH);
               delay(100);
               Serial.println("GPIO 0 is Off..!");
             }
             gpio = 2;
           } else if (gpioId == "2") {
             if (gpioStatus == "on") {
-              digitalWrite(2, HIGH);
+              digitalWrite(2, LOW);
               Serial.println("GPIO 2 is On..!");
             } else if (gpioStatus == "off") {
-              digitalWrite(2, LOW);
+              digitalWrite(2, HIGH);
               Serial.println("GPIO 2 is Off..!");
             }
             gpio = 1;
