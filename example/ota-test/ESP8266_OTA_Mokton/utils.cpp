@@ -180,5 +180,8 @@ int checkFirmwareUpdate(ConfigStore &configStore)
         DEBUG_PRINTF("Context: %s\n", payload.c_str());
         result = 0;
     }
-    return result;
+
+    //Now return 1 is fixed for default, for getting always firmware update
+    //We need to get this value from server
+    return 1;
 }

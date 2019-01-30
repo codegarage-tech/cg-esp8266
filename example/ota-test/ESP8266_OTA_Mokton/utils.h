@@ -50,12 +50,12 @@ const ConfigStore configDefault = {
     0x26512E6D,  //0x265CAE6D
     "0.0.1",
     0, 0, 0, 0,
-    "",
-    "",    
-    "192.168.1.108",
+    "Dicosta",
+    "ramo011911",
+    "iot-cuddle.000webhostapp.com",
     80,
-    "/firmware/esp8266",
-    "/hasNewfirmware/"
+    "/iot/fota",
+    "/update.txt"
 };
 
 boolean initConfig(ConfigStore &configStore);
