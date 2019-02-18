@@ -1,6 +1,12 @@
+#include <ezTime.h>
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
+
+#define LOCALTZ_POSIX  "CET-1CEST,M3.4.0/2,M10.4.0/3"    // Time in Berlin
+
+Timezone local;
+Timezone pacific;
 
 const char* ssid     = "Dicosta";
 const char* password = "ramo011911";
@@ -38,14 +44,34 @@ void connectToWifi() {
 }
 
 void setup() {
+  // Setup serial port
   Serial.begin(115200);
   delay(1000);
+  while (!Serial) {    // wait for Serial port to connect. Needed for native USB port only
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+
+  // Dealing with current date-time
+  local.setPosix(LOCALTZ_POSIX);
+  local.setTime(compileTime());
+  Serial.print(F("Local time   :  "));
+  Serial.println(local.dateTime());
+  pacific.setPosix(F("PST+8PDT,M3.2.0/2,M11.1.0/2"));
+  Serial.print(F("Pacific time :  "));
+  Serial.println(pacific.dateTime());
+  Serial.print(F("UTC          :  "));
+  Serial.println(UTC.dateTime());
+
+  // Setup different pins
   pinMode(0, OUTPUT);
   pinMode(2, OUTPUT);
   digitalWrite(0, HIGH);
   digitalWrite(2, HIGH);
   Serial.println();
 
+  // Connect to wifi
   connectToWifi();
 }
 
