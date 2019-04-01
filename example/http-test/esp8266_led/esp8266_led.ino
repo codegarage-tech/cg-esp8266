@@ -100,9 +100,9 @@ void loop() {
     int httpCode = http.GET();
 
     // httpCode will be negative on error
+    Serial.printf("[HTTP] GET... code: %d\n", httpCode);
     if (httpCode > 0) {
       // HTTP header has been send and Server response header has been handled
-      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
       // file found at server
       if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
