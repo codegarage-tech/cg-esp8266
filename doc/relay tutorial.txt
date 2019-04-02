@@ -8,3 +8,5 @@ https://www.youtube.com/watch?v=Hz4RaSw5Rfg
 https://www.youtube.com/watch?v=WfO3wGHS_Vc
 https://www.eeebangla.com/bn/project/relay-module
 https://www.youtube.com/watch?v=cL-BCGeQiGc
+https://cmheong.blogspot.com/2018/03/debugging-esp8266-esp-01s-relay-module.html
+https://www.electroschematics.com/13418/use-switch-mode-power-supplies-power-iot-design/
