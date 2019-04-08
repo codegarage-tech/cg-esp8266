@@ -10,9 +10,8 @@ Timezone pacific;
 
 const char* ssid     = "Dicosta";
 const char* password = "ramo011911";
-const char* host = "iot-cuddle.000webhostapp.com";
-
-int gpio = 1;
+//const char* host = "iot-cuddle.000webhostapp.com";
+//int gpio = 1;
 
 void connectToWifi() {
   delay(1000);
@@ -46,7 +45,7 @@ void connectToWifi() {
 void setup() {
   // Setup serial port
   Serial.begin(115200);
-  delay(1000);
+  delay(10000);
   while (!Serial) {    // wait for Serial port to connect. Needed for native USB port only
     delay(500);
     Serial.print(".");
@@ -73,6 +72,18 @@ void setup() {
 
   // Connect to wifi
   connectToWifi();
+} 
+
+// the loop function runs over and over again forever
+void loopBlink() {
+  digitalWrite(0, LOW);
+//  digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
+  // but actually the LED is on; this is because
+  // it is active low on the ESP-01)
+  delay(1000);                      // Wait for a second
+  digitalWrite(0, HIGH);
+//  digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+  delay(3000);                      // Wait for two seconds (to demonstrate the active low LED)
 }
 
 void loop() {
@@ -82,13 +93,13 @@ void loop() {
     HTTPClient http;
 
     String url = "";
-    if (gpio == 1) {
+//    if (gpio == 1) {
       Serial.println("Preparing GPIO 0 url");
       url = "http://iot-cuddle.000webhostapp.com/iot/api/led/specific.php?id=1";
-    } else if (gpio == 2) {
-      Serial.println("Preparing GPIO 2 url");
-      url = "http://iot-cuddle.000webhostapp.com/iot/api/led/specific.php?id=2";
-    }
+//    } else if (gpio == 2) {
+//      Serial.println("Preparing GPIO 2 url");
+//      url = "https://iot-cuddle.000webhostapp.com/iot/api/led/specific.php?id=2";
+//    }
     Serial.print("Requesting URL: ");
     Serial.println(url);
 
@@ -125,7 +136,7 @@ void loop() {
           Serial.println("gpioStatus: " + gpioStatus);
 
           //do further task
-          if (gpioId == "1") {
+//          if (gpioId == "1") {
             if (gpioStatus == "on") {
               digitalWrite(0, LOW);
               delay(100);
@@ -135,18 +146,18 @@ void loop() {
               delay(100);
               Serial.println("GPIO 0 is Off..!");
             }
-            gpio = 2;
-          } else if (gpioId == "2") {
-            if (gpioStatus == "on") {
-              digitalWrite(2, LOW);
-              Serial.println("GPIO 2 is On..!");
-            } else if (gpioStatus == "off") {
-              digitalWrite(2, HIGH);
-              Serial.println("GPIO 2 is Off..!");
-            }
-            gpio = 1;
-          }
-          Serial.println("Next gpio id: " + gpio);
+//            gpio = 2;
+//          } else if (gpioId == "2") {
+//            if (gpioStatus == "on") {
+//              digitalWrite(2, LOW);
+//              Serial.println("GPIO 2 is On..!");
+//            } else if (gpioStatus == "off") {
+//              digitalWrite(2, HIGH);
+//              Serial.println("GPIO 2 is Off..!");
+//            }
+//            gpio = 1;
+//          }
+//          Serial.println("Next gpio id: " + gpio);
         } else {
           Serial.printf("[HTTP] GET... got null or empty response");
         }
