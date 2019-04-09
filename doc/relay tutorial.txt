@@ -12,3 +12,4 @@ https://cmheong.blogspot.com/2018/03/debugging-esp8266-esp-01s-relay-module.html
 https://www.electroschematics.com/13418/use-switch-mode-power-supplies-power-iot-design/
 https://www.youtube.com/watch?v=EnhSJ-Nq14Q
 https://www.instructables.com/id/DIY-RELAY-MODULE/
+https://www.youtube.com/watch?v=bqR5QdeXiio
