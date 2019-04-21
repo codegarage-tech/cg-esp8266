@@ -76,14 +76,17 @@ void setup() {
 
 // the loop function runs over and over again forever
 void loopBlink() {
+  delay(5000);
   digitalWrite(0, LOW);
+  Serial.print("0 pin low\n");
 //  digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
   // but actually the LED is on; this is because
   // it is active low on the ESP-01)
-  delay(1000);                      // Wait for a second
+  delay(5000);                      // Wait for a second
   digitalWrite(0, HIGH);
+  Serial.print("0 pin high\n");
 //  digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
-  delay(3000);                      // Wait for two seconds (to demonstrate the active low LED)
+//  delay(1000);                      // Wait for two seconds (to demonstrate the active low LED)
 }
 
 void loop() {
