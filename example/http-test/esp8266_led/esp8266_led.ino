@@ -4,7 +4,7 @@
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 #include <ESP8266HTTPClient.h>
-
+//#define COMMON_ANODE
 #define LOCALTZ_POSIX  "CET-1CEST,M3.4.0/2,M10.4.0/3"    // Time in Berlin
 
 Timezone local;
@@ -14,7 +14,8 @@ const char* ssid     = "Dicosta";
 const char* password = "ramo011911";
 //const char* host = "iot-cuddle.000webhostapp.com";
 //int gpio = 1;
-int TX = 1, GPIO0 = 0, GPIO2 = 2, RX = 3;
+int GPIO0 = 0, GPIO2 = 2;
+//TX = 1, RX = 3;
 
 // Declare an RGBLED instanced named rgbLed
 // Red, Green and Blue LED legs are connected to PWM pins 11,9 & 6 respectively
@@ -74,15 +75,15 @@ void setup() {
   // Setup different pins
   pinMode(GPIO0, OUTPUT);
   //////////////////////
-pinMode(TX, OUTPUT);
+//pinMode(TX, OUTPUT);
 pinMode(GPIO2, OUTPUT);
-pinMode(RX, OUTPUT);
+//pinMode(RX, OUTPUT);
 ///////////////////////
   digitalWrite(GPIO0, HIGH);
   /////////////////////
-  analogWrite(TX, 1023);
+//  analogWrite(TX, 1023);
   analogWrite(GPIO2, 1023);
-  analogWrite(RX, 1023);
+//  analogWrite(RX, 1023);
   /////////////////////////
   Serial.println();
 
@@ -189,13 +190,93 @@ void loop() {
   }
 //////////////////////////////////////////
 //  //Control wifi led signal
-   long rssi = WiFi.RSSI();
-   int bars = getBarsSignal(rssi);
-   setWifiSignlaLed(bars);
+//   long rssi = WiFi.RSSI();
+//   Serial.println("rssi: " + rssi);
+//   int bars = getBarsSignal(rssi);
+//   Serial.println("bars: " + bars);
+//   setWifiSignlaLed(bars);
+
+//static int previousQuality = -1;
+//  int quality = getQuality();
+//  if (quality != previousQuality) {  // If the quality changed since last print, print new quality and RSSI
+//    if (quality != -1){
+//      Serial.printf("WiFi Quality:\t%d\%\tRSSI:\t%d dBm\r\n", quality, WiFi.RSSI());
+      int bars = getBarsSignal(WiFi.RSSI());
+//      Serial.printf("bars: \t%d\r\n" , bars);
+      if((bars == 4)||(bars == 5)){
+        Serial.println("Wifi Signal is good: 4 or 5");
+      } else if(bars == 3){
+        Serial.println("Wifi Signal is medium: 3");
+       }else if((bars == 1)||(bars == 2)){
+        Serial.println("Wifi Signal is low: 1 or 2");
+        }else if(bars == 0){
+        Serial.println("Wifi Signal is not available: 0");
+         }
+//    }
+//    previousQuality = quality;
+//  }
+
 //////////////////////////////////////////
   Serial.println("Wait 3s before next round...");
   delay(3000);
 }
+
+//void setColor(int red, int green, int blue)
+//{
+//  #ifdef COMMON_ANODE
+//    red = 255 - red;
+//    green = 255 - green;
+//    blue = 255 - blue;
+//  #endif
+//  analogWrite(redPin, red);
+//  analogWrite(greenPin, green);
+//  analogWrite(bluePin, blue);  
+//}
+
+int getBarsSignal(long rssi){
+  // 5. High quality: 90% ~= -55db
+  // 4. Good quality: 75% ~= -65db
+  // 3. Medium quality: 50% ~= -75db
+  // 2. Low quality: 30% ~= -85db
+  // 1. Unusable quality: 8% ~= -96db
+  // 0. No signal
+
+  int bars = 0;
+  if (WiFi.status() == WL_CONNECTED){
+    if (rssi > -55) {
+      bars = 5;
+    } else if (rssi < -55 & rssi > -65) {
+      bars = 4;
+    } else if (rssi < -65 & rssi > -75) {
+      bars = 3;
+    } else if (rssi < -75 & rssi > -85) {
+      bars = 2;
+    } else if (rssi < -85 & rssi > -96) {
+      bars = 1;
+    } else {
+      bars = 0;
+    }  
+  }
+
+  return bars;
+}
+
+///*
+//   Return the quality (Received Signal Strength Indicator)
+//   of the WiFi network.
+//   Returns a number between 0 and 100 if WiFi is connected.
+//   Returns -1 if WiFi is disconnected.
+//*/
+//int getQuality() {
+//  if (WiFi.status() != WL_CONNECTED)
+//    return -1;
+//  int dBm = WiFi.RSSI();
+//  if (dBm <= -100)
+//    return 0;
+//  if (dBm >= -50)
+//    return 100;
+//  return 2 * (dBm + 100);
+//}
 
 //void printRgbValues() {
 //  Serial.println("Requested RGB Values:");
@@ -216,62 +297,37 @@ void loop() {
 //  }
 //}
 
-void setWifiSignlaLed(int signalBar){
-  switch(signalBar){
-    case 0:
-    analogWrite(GPIO2, 255);
-    analogWrite(RX,0);
-    analogWrite(TX,0);
-    break;
-    case 1:
-    analogWrite(GPIO2, 0);
-    analogWrite(RX,255);
-    analogWrite(TX,0);
-    break;
-    case 2:
-    analogWrite(GPIO2, 0);
-    analogWrite(RX,0);
-    analogWrite(TX,255);
-    break;
-    case 3:
-    analogWrite(GPIO2, 255);
-    analogWrite(RX,0);
-    analogWrite(TX,0);
-    break;
-    case 4:
-    analogWrite(GPIO2, 0);
-    analogWrite(RX,255);
-    analogWrite(TX,0);
-    break;
-    case 5:
-    analogWrite(GPIO2, 0);
-    analogWrite(RX,0);
-    analogWrite(TX,255);
-    break;
-  }
-}
-
-int getBarsSignal(long rssi){
-  // 5. High quality: 90% ~= -55db
-  // 4. Good quality: 75% ~= -65db
-  // 3. Medium quality: 50% ~= -75db
-  // 2. Low quality: 30% ~= -85db
-  // 1. Unusable quality: 8% ~= -96db
-  // 0. No signal
-  int bars;
-
-  if (rssi > -55) {
-    bars = 5;
-  } else if (rssi < -55 & rssi > -65) {
-    bars = 4;
-  } else if (rssi < -65 & rssi > -75) {
-    bars = 3;
-  } else if (rssi < -75 & rssi > -85) {
-    bars = 2;
-  } else if (rssi < -85 & rssi > -96) {
-    bars = 1;
-  } else {
-    bars = 0;
-  }
-  return bars;
-}
+//void setWifiSignlaLed(int signalBar){
+//  switch(signalBar){
+//    case 0:
+//    analogWrite(GPIO2, 255);
+////    analogWrite(RX,1023);
+//    analogWrite(TX,1023);
+//    break;
+//    case 1:
+//    analogWrite(GPIO2, 1023);
+////    analogWrite(RX,255);
+//    analogWrite(TX, 255);
+//    break;
+//    case 2:
+//    analogWrite(GPIO2, 255);
+////    analogWrite(RX, 1023);
+//    analogWrite(TX, 1023);
+//    break;
+//    case 3:
+//    analogWrite(GPIO2, 1023);
+////    analogWrite(RX, 1023);
+//    analogWrite(TX, 255);
+//    break;
+//    case 4:
+//    analogWrite(GPIO2, 255);
+////    analogWrite(RX, 1023);
+//    analogWrite(TX, 1023);
+//    break;
+//    case 5:
+//    analogWrite(GPIO2, 1023);
+////    analogWrite(RX,1023);
+//    analogWrite(TX,255);
+//    break;
+//  }
+//}
