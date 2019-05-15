@@ -80,9 +80,9 @@ void setup() {
   ///////////////////////
   digitalWrite(GPIO0, HIGH);
   ///////////////////
-    analogWrite(TX, 1023);
-    analogWrite(GPIO2, 1023);
-    analogWrite(RX, 1023);
+  analogWrite(TX, 1023);
+  analogWrite(GPIO2, 1023);
+  analogWrite(RX, 1023);
   /////////////////////////
   Serial.println();
 
@@ -205,31 +205,31 @@ void loop() {
   if ((bars == 4) || (bars == 5)) {
     Serial.println("Wifi Signal is good: 4 or 5");
     //Set the RGBLED to show GREEN only
-//    rgbLed.writeRGB(0, 255, 0);
+    //    rgbLed.writeRGB(0, 255, 0);
     analogWrite(GPIO2, 255);
-    analogWrite(RX,1023);
-    analogWrite(TX,1023);
+    analogWrite(RX, 1023);
+    analogWrite(TX, 1023);
   } else if (bars == 3) {
     Serial.println("Wifi Signal is medium: 3");
     //Set the RGBLED to show BLUE only
-//    rgbLed.writeRGB(0, 0, 255);
+    //    rgbLed.writeRGB(0, 0, 255);
     analogWrite(GPIO2, 1023);
-    analogWrite(RX,1023);
-    analogWrite(TX,255);
+    analogWrite(RX, 1023);
+    analogWrite(TX, 255);
   } else if ((bars == 1) || (bars == 2)) {
     Serial.println("Wifi Signal is low: 1 or 2");
     //Set the RGBLED to show YELLOW (RED & GREEN) only
-//    rgbLed.writeRGB(255, 255, 0);
+    //    rgbLed.writeRGB(255, 255, 0);
     analogWrite(GPIO2, 1023);
-    analogWrite(RX,255);
-    analogWrite(TX,1023);
+    analogWrite(RX, 255);
+    analogWrite(TX, 1023);
   } else if (bars == 0) {
     Serial.println("Wifi Signal is not available: 0");
     //Set the RGBLED to show RED only
-//    rgbLed.writeRGB(255, 0, 0);
+    //    rgbLed.writeRGB(255, 0, 0);
     analogWrite(GPIO2, 1023);
-    analogWrite(RX,1023);
-    analogWrite(TX,1023);
+    analogWrite(RX, 1023);
+    analogWrite(TX, 1023);
   }
   //    }
   //    previousQuality = quality;
